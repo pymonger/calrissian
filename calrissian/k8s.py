@@ -87,9 +87,12 @@ class KubernetesClient(object):
         :return:
         """
         delete_pods = os.getenv('CALRISSIAN_DELETE_PODS', '')
+        log.info('CALRISSIAN_DELETE_PODS={}({})'.format(delete_pods, type(delete_pods)))
         if str.lower(delete_pods) in ['false', 'no', '0']:
+            log.info('returning False')
             return False
         else:
+            log.info('returning True')
             return True
 
     @retry_exponential_if_exception_type((ApiException, HTTPError,), log)
@@ -285,19 +288,20 @@ class PodMonitor(object):
             log.warning('PodMonitor {} has already been removed'.format(pod.metadata.name))
 
     @staticmethod
-    def cleanup():
-        log.info('Starting Cleanup')
+    def cleanup(force=False):
         with PodMonitor() as monitor:
             k8s_client = KubernetesClient()
-            for pod_name in PodMonitor.pod_names:
-                log.info('PodMonitor deleting pod {}'.format(pod_name))
-                try:
-                    k8s_client.delete_pod_name(pod_name)
-                except Exception:
-                    log.error('Error deleting pod named {}, ignoring'.format(pod_name))
-            PodMonitor.pod_names = []
-        log.info('Finishing Cleanup')
+            if force or k8s_client.should_delete_pod():
+                log.info('Starting Cleanup')
+                for pod_name in PodMonitor.pod_names:
+                    log.info('PodMonitor deleting pod {}'.format(pod_name))
+                    try:
+                        k8s_client.delete_pod_name(pod_name)
+                    except Exception:
+                        log.error('Error deleting pod named {}, ignoring'.format(pod_name))
+                PodMonitor.pod_names = []
+                log.info('Finishing Cleanup')
 
 
-def delete_pods():
-    PodMonitor.cleanup()
+def delete_pods(force=False):
+    PodMonitor.cleanup(force)

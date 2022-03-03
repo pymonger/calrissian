@@ -34,7 +34,8 @@ setup(
     install_requires=[
         'urllib3>=1.24.2,<1.27',
         'kubernetes==10.0.1',
-        'cwltool==3.1.20211004060744',
+        #'cwltool==3.1.20211004060744',
+        'cwltool @ git+https://github.com/pymonger/cwltool@handle-unsupported-file-ops#egg=cwltool',
         'tenacity==5.1.1',
     ],
     test_suite='nose2.collector.collector',

@@ -247,6 +247,7 @@ class KubernetesPodBuilder(object):
             containers.append({
                 'name': self.init_container_name(),
                 'image':  os.environ.get(INIT_IMAGE_ENV_VARIABLE, DEFAULT_INIT_IMAGE),
+                'imagePullPolicy': 'Always',
                 'command': ['/bin/sh', '-c', ' '.join(command_list)],
                 'workingDir': self.container_workingdir(),
                 'volumeMounts': self.volume_mounts,
@@ -328,6 +329,7 @@ class KubernetesPodBuilder(object):
                         {
                             'name': self.container_name(),
                             'image': self.container_image,
+                            'imagePullPolicy': 'Always',
                             'command': self.container_command(),
                             'args': self.container_args(),
                             'env': self.container_environment(),
