@@ -18,7 +18,7 @@ STATUS=$?
 if [ ! -z "${usage_report}" ]; then
   echo "# BEGIN docker-usage.json"
   cat ${usage_report}
-  echo "# END docker-usage.json"
+  echo "\n# END docker-usage.json"
 fi
 
 # propagate exit status of calrissian
