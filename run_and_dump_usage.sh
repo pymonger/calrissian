@@ -17,7 +17,7 @@ STATUS=$?
 # dump docker usage stats
 if [ ! -z "${usage_report}" ]; then
   echo "# BEGIN docker-usage.json"
-  cat /calrissian/output-data/${output_pvc_name}/docker-usage.json
+  cat ${usage_report}
   echo "# END docker-usage.json"
 fi
 
