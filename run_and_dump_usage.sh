@@ -11,7 +11,7 @@ for (( i=1; i <= "$#"; i++ )); do
 done
 
 # run calrissian and capture exit status
-calrissian $*
+calrissian "$@"
 STATUS=$?
 
 # dump docker usage stats
