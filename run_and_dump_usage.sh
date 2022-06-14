@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# extract job_id
+job_id="$1"; shift
+
+# write labels yaml
+echo "job-name: ${job_id}" > /tmp/pod_labels.yml
+
 # extract usage report output filename if set
 usage_report=""
 for (( i=1; i <= "$#"; i++ )); do
@@ -11,7 +17,7 @@ for (( i=1; i <= "$#"; i++ )); do
 done
 
 # run calrissian and capture exit status
-calrissian "$@"
+calrissian --pod-labels /tmp/pod_labels.yml "$@"
 STATUS=$?
 
 # dump docker usage stats
